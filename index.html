@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script
+      src="https://unpkg.com/react@17/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="/script/fsm.js"></script>
+    <link rel="stylesheet" href="style/main.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useRef, useEffect, useState } = React;
+      const Canvas = ({}) => {
+        const ref = useRef();
+        useEffect(() => {
+          const { clientWidth: width, clientHeight: height } = document.body;
+          // console.log(document.wid)
+          let cxx = ref.current;
+          cxx.width = width;
+          cxx.height = height;
+        }, []);
+
+        return (
+          <div className="Canvas">
+            <canvas id="canvas" ref={ref} />
+          </div>
+        );
+      };
+
+      const Info = ({}) => {
+        let data = [
+          { title: "Add a state", desc: "double-click on the canvas" },
+          { title: "Add an arrow", desc: "shift-drag on the canvas" },
+          { title: "Move something", desc: "drag it around" },
+          {
+            title: "Delete something",
+            desc: "click it and press the delete key (not the backspace key)",
+          },
+          {
+            title: "Make accept state",
+            desc: "double-click on an existing state",
+          },
+          {
+            title: "Type numeric subscript",
+            desc: `put an underscore before the number (like "S_0")`,
+          },
+          {
+            title: "Type greek letter",
+            desc: `put a backslash before it (like "\\beta")`,
+          },
+        ];
+
+        const [isShow, setShow] = useState(true);
+        const handleShow = () => {
+          setShow((k) => !k);
+        };
+        return (
+          <div className="Info">
+            <div className="Hide" onClick={handleShow}>
+              {!isShow ? "Show" : "Hide"} Controls
+            </div>
+
+            {isShow &&
+              data.map((e) => {
+                return (
+                  <div className="Info_child">
+                    <div className="Info_child_title">{e.title}</div>
+                    <div className="Info_child_desc">{e.desc}</div>
+                  </div>
+                );
+              })}
+          </div>
+        );
+      };
+      function About() {
+        return (
+          <div className="About">
+            <div class="About_name">FSM</div>
+            <div class="About_by">wrapped by GulTion</div>
+          </div>
+        );
+      }
+
+      function Save() {
+        return <div className="Save">SAVE</div>;
+      }
+      function App() {
+        console.log(React);
+
+        return (
+          <div className="App">
+            <Info />
+
+            <Canvas />
+            <About />
+          </div>
+        );
+      }
+
+      ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+  </body>
+</html>
