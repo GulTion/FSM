@@ -71,7 +71,9 @@
 
         const [isShow, setShow] = useState(true);
         useEffect(() => {
-          setShow(localStorage.getItem("about") === "true");
+          let p = localStorage.getItem("about");
+          p = p === null || p === "true";
+          setShow(p);
         }, []);
         const handleShow = () => {
           setShow((k) => {
