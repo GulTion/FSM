@@ -181,7 +181,7 @@ function ExportAsLaTeX() {
 function ExportAsSVG() {
   this.fillStyle = "white";
   this.strokeStyle = "white";
-  this.lineWidth = 1;
+  this.lineWidth = 2;
   this.font = "12px Arial, sans-serif";
   this._points = [];
   this._svgData = "";
@@ -976,6 +976,15 @@ function drawArrow(c, x, y, angle) {
   c.fill();
 }
 
+function clearCtx() {
+  let canvas = document.getElementById("canvas");
+  const context = canvas.getContext("2d");
+
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
+  // c.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 function canvasHasFocus() {
   return (document.activeElement || document.body) == document.body;
 }
@@ -1028,7 +1037,7 @@ function resetCaret() {
 }
 
 var canvas;
-var nodeRadius = 30;
+var nodeRadius = 40;
 var nodes = [];
 var links = [];
 
@@ -1037,7 +1046,7 @@ var snapToPadding = 6; // pixels
 var hitTargetPadding = 6; // pixels
 var selectedObject = null; // either a Link or a Node
 var currentLink = null; // a Link
-var movingObject = false;
+var movingObject = true;
 var originalClick;
 
 function drawUsing(c) {
@@ -1046,19 +1055,19 @@ function drawUsing(c) {
   c.translate(0.5, 0.5);
 
   for (var i = 0; i < nodes.length; i++) {
-    c.lineWidth = 1;
+    c.lineWidth = 2;
     c.fillStyle = c.strokeStyle =
       nodes[i] == selectedObject ? "black" : "white";
     nodes[i].draw(c);
   }
   for (var i = 0; i < links.length; i++) {
-    c.lineWidth = 1;
+    c.lineWidth = 2;
     c.fillStyle = c.strokeStyle =
       links[i] == selectedObject ? "black" : "white";
     links[i].draw(c);
   }
   if (currentLink != null) {
-    c.lineWidth = 1;
+    c.lineWidth = 2;
     c.fillStyle = c.strokeStyle = "white";
     currentLink.draw(c);
   }
@@ -1341,7 +1350,8 @@ function saveAsPNG() {
   drawUsing(canvas.getContext("2d"));
   selectedObject = oldSelectedObject;
   var pngData = canvas.toDataURL("image/png");
-  document.location.href = pngData;
+  // document.location.href = pngData;
+  return pngData;
 }
 
 function saveAsSVG() {
@@ -1351,7 +1361,8 @@ function saveAsSVG() {
   drawUsing(exporter);
   selectedObject = oldSelectedObject;
   var svgData = exporter.toSVG();
-  output(svgData);
+  // output(svgData);
+  return svgData;
   // Chrome isn't ready for this yet, the 'Save As' menu item is disabled
   // document.location.href = 'data:image/svg+xml;base64,' + btoa(svgData);
 }

@@ -69,9 +69,9 @@
             </div>
 
             {isShow &&
-              data.map((e) => {
+              data.map((e, i) => {
                 return (
-                  <div className="Info_child">
+                  <div className="Info_child" key={i}>
                     <div className="Info_child_title">{e.title}</div>
                     <div className="Info_child_desc">{e.desc}</div>
                   </div>
@@ -83,20 +83,126 @@
       function About() {
         return (
           <div className="About">
-            <div class="About_name">FSM</div>
-            <div class="About_by">wrapped by GulTion</div>
+            <div className="About_name">FSM</div>
+            <div className="About_by">wrapped by GulTion</div>
           </div>
         );
       }
+      function Button({ text = "Button", onClick }) {
+        return (
+          <div className="Button" onClick={onClick}>
+            {text}
+          </div>
+        );
+      }
+      function Title() {
+        const [show, setShow] = useState(true);
+        const [isRenamed, setRenamed] = useState(false);
+        const handleSet = () => {
+          setShow(!show);
+        };
+        const [text, onChange] = useState(
+          localStorage.getItem("name") || "Untitled - 1"
+        );
+        const handleChange = (e) => {
+          localStorage.setItem("name", e.target.value);
+          onChange(e.target.value);
+        };
+        const handleClick = (e) => {
+          setRenamed(true);
+        };
+        return (
+          <>
+            <div className="Title">
+              <Button text={show ? "Open" : "Close"} onClick={handleSet} />
+              <input
+                className={`Title_name ${isRenamed ? "Title_name_active" : ""}`}
+                value={text}
+                onChange={handleChange}
+                // disabled={!isRenamed}
+                onClick={handleClick}
+                // onDoubleClick={handleClick}
+              />
+            </div>
+            {show && <File name={text} />}
+          </>
+        );
+      }
+      function File({ name }) {
+        const [list, setList] = useState(
+          JSON.parse(localStorage.getItem("list") || `[]`)
+        );
+        const handleSave = () => {
+          let find = list.findIndex((e) => e.name === name);
+          let listUp = [...list];
+          let k = { name, svg: saveAsPNG(), fsm: localStorage.getItem("fsm") };
+          if (find === -1) {
+            let anP = [k, ...listUp];
+            setList(anP);
+            localStorage.setItem("list", JSON.stringify(anP));
+          } else {
+            listUp.splice(find, 1);
+            let anP = [k, ...listUp];
+            setList(anP);
+            localStorage.setItem("list", JSON.stringify(anP));
+          }
+        };
+        const handleDelete = (i) => {
+          return () => {
+            let p = [...list];
+            p.splice(i, 1);
+            localStorage.setItem("list", JSON.stringify(p));
 
+            setList(p);
+          };
+        };
+
+        const handleOpen = (i) => {
+          return () => {
+            localStorage.setItem("fsm", list[i].fsm);
+            clearCtx();
+            restoreBackup();
+          };
+        };
+        // const handle
+        return (
+          <div className="File flex column">
+            <div className="flex row">
+              <Button text={"Save this drawing"} onClick={handleSave} />
+            </div>
+            <div className="List_list flex column">
+              {list.map((e, i) => {
+                return (
+                  <div className="List" key={i}>
+                    <div
+                      className="List_svg"
+                      // dangerouslySetInnerHTML={{ __html: e.svg }}
+                      // style={{ background: `url(${e.svg})` }}
+                    >
+                      <img src={e.svg} />
+                    </div>
+                    <div className="flex row">
+                      <div className="List_name ">{e.name}</div>{" "}
+                      <Button text={"open"} onClick={handleOpen(i)} />
+                      <Button text={"delete"} onClick={handleDelete(i)} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }
       function Save() {
         return <div className="Save">SAVE</div>;
       }
+
       function App() {
         console.log(React);
 
         return (
           <div className="App">
+            <Title />
             <Info />
 
             <Canvas />
