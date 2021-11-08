@@ -1046,7 +1046,7 @@ var snapToPadding = 6; // pixels
 var hitTargetPadding = 6; // pixels
 var selectedObject = null; // either a Link or a Node
 var currentLink = null; // a Link
-var movingObject = true;
+var movingObject = false;
 var originalClick;
 
 function drawUsing(c) {
