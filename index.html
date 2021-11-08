@@ -18,6 +18,17 @@
 
     <script type="text/babel">
       const { useRef, useEffect, useState } = React;
+      const Theme = [
+        "linear-gradient(to left, #f64f59, #c471ed, #12c2e9)",
+        "linear-gradient(to left, #009fff, #ec2f4b)",
+        "linear-gradient(to left, #8a2387, #e94057, #f27121)",
+        "linear-gradient(to left, #fc466b, #3f5efb)",
+        "linear-gradient(to left, #de6161, #2657eb)",
+        "linear-gradient(to left, #833ab4, #fd1d1d, #fcb045)",
+        "linear-gradient(to left, #780206, #061161)",
+        " linear-gradient(to left, #ff512f, #dd2476)",
+        "linear-gradient(to left, #feac5e, #c779d0, #4bc0c8)",
+      ];
       const Canvas = ({}) => {
         const ref = useRef();
         useEffect(() => {
@@ -59,8 +70,14 @@
         ];
 
         const [isShow, setShow] = useState(true);
+        useEffect(() => {
+          setShow(localStorage.getItem("about") === "true");
+        }, []);
         const handleShow = () => {
-          setShow((k) => !k);
+          setShow((k) => {
+            localStorage.setItem("about", !k);
+            return !k;
+          });
         };
         return (
           <div className="Info">
@@ -114,7 +131,10 @@
         return (
           <>
             <div className="Title">
-              <Button text={show ? "Open" : "Close"} onClick={handleSet} />
+              <Button
+                text={!show ? "Open Panel" : "Close Panel"}
+                onClick={handleSet}
+              />
               <input
                 className={`Title_name ${isRenamed ? "Title_name_active" : ""}`}
                 value={text}
@@ -160,16 +180,27 @@
         const handleOpen = (i) => {
           return () => {
             localStorage.setItem("fsm", list[i].fsm);
-            clearCtx();
-            restoreBackup();
+            localStorage.setItem("name", list[i].name);
+            // clearCtx();
+            // restoreBackup();
+            location.reload();
           };
         };
-        // const handle
+
+        const handleTheme = () => {
+          let cxx = document.querySelector(".Canvas");
+          let p = Number(localStorage.getItem("themeIndex") || 0);
+          let next = (p + 1) % Theme.length;
+          cxx.style.background = Theme[next];
+          localStorage.setItem("themeIndex", next);
+        };
         return (
           <div className="File flex column">
             <div className="flex row">
               <Button text={"Save this drawing"} onClick={handleSave} />
+              <Button text={"Change Theme"} onClick={handleTheme} />
             </div>
+            <hr />
             <div className="List_list flex column">
               {list.map((e, i) => {
                 return (
@@ -198,7 +229,12 @@
       }
 
       function App() {
-        console.log(React);
+        // console.log(React);
+        useEffect(() => {
+          let inD = Number(localStorage.getItem("themeIndex") || 0);
+          let cxx = document.querySelector(".Canvas");
+          cxx.style.background = Theme[inD];
+        }, []);
 
         return (
           <div className="App">

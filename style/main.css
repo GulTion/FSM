@@ -1,8 +1,13 @@
 .Canvas{
-    background: #DD5E89;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #F7BB97, #DD5E89);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #F7BB97, #DD5E89); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    
+    /* background: #DD5E89; 
+    background: -webkit-linear-gradient(to right, #F7BB97, #DD5E89);  
+    background: linear-gradient(to right, #F7BB97, #DD5E89); 
+
+     */
+   
+/* background: -webkit-linear-gradient(to left, #f64f59, #c471ed, #12c2e9);  Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to left, #f64f59, #c471ed, #12c2e9); 
+
 }
 .Canvas canvas{
     width: 100%;
@@ -122,6 +127,7 @@ html, body{
     font-weight: 600;
     border: none;
     background: none;
+    color: white;
 
 }
 
@@ -204,4 +210,10 @@ html, body{
 ::-webkit-scrollbar{
     width: 10px;
     /* color: red; */
+}
+
+hr{
+    width: 100%;
+    border-color:white;
+    background: white;
 }
